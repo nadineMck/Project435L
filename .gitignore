@@ -1,0 +1,5 @@
+__pycache__/
+venv/
+smart_meeting.db
+*.pyc
+.env
