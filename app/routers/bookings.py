@@ -10,6 +10,11 @@ router = APIRouter(prefix="/bookings", tags=["bookings"])
 
 
 def overlaps(start1, end1, start2, end2) -> bool:
+    """
+    Check if two time intervals overlap.
+
+    Returns True if the interval [start1, end1) overlaps with [start2, end2).
+    """
     return start1 < end2 and start2 < end1
 
 
@@ -21,7 +26,10 @@ def check_room_availability(
     db: Session = Depends(get_db),
 ):
     """
-    Check if a room is free in a given time range (without creating a booking).
+    Check if a room is available in a given time range.
+
+    This does not create a booking. It just verifies if any existing
+    bookings overlap with the requested time window.
     """
     room = db.query(models.Room).filter(models.Room.id == room_id).first()
     if not room:
@@ -55,6 +63,12 @@ def list_bookings(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    List bookings for the current user or all bookings.
+
+    - Admin and facility managers see **all** bookings.
+    - Regular users see **only their own** bookings.
+    """
     # Admin/facility_manager see all, regular sees only own
     if current_user.role in ("admin", "facility_manager"):
         return db.query(models.Booking).all()
@@ -67,6 +81,13 @@ def create_booking(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    Create a new booking for a room.
+
+    Regular users and facility managers must respect room availability:
+    overlapping bookings are rejected. Admins can override conflicts and
+    create overlapping bookings if needed.
+    """
     room = db.query(models.Room).filter(models.Room.id == booking_in.room_id).first()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -101,6 +122,13 @@ def update_booking(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    Update an existing booking.
+
+    Only the owner of the booking or an admin can update the booking.
+    For non-admins, the new time range must not overlap with other
+    bookings for the same room.
+    """
     booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")
@@ -135,6 +163,12 @@ def cancel_booking(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    Cancel a booking.
+
+    - Regular users and facility managers can cancel their own bookings.
+    - Admins can force-cancel any booking (override).
+    """
     booking = db.query(models.Booking).filter(models.Booking.id == booking_id).first()
     if not booking:
         raise HTTPException(status_code=404, detail="Booking not found")

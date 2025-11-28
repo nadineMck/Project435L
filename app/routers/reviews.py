@@ -14,6 +14,12 @@ def create_review(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    Create a new review for a room.
+
+    Only authenticated users can review rooms. The review is linked
+    to the current user and the specified room.
+    """
     room = db.query(models.Room).filter(models.Room.id == review_in.room_id).first()
     if not room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -32,6 +38,11 @@ def create_review(
 
 @router.get("/room/{room_id}", response_model=List[schemas.ReviewOut])
 def get_reviews_for_room(room_id: int, db: Session = Depends(get_db)):
+    """
+    Get all non-deleted reviews for a room.
+
+    Soft-deleted reviews are excluded from this listing.
+    """
     # Only return non-deleted reviews to normal consumers
     return (
         db.query(models.Review)
@@ -47,6 +58,13 @@ def update_review(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    """
+    Update an existing review.
+
+    - Regular users and facility managers can update **their own** reviews.
+    - Admins can update any review.
+    - Deleted reviews cannot be updated.
+    """
     review = db.query(models.Review).filter(models.Review.id == review_id).first()
     if not review:
         raise HTTPException(status_code=404, detail="Review not found")
@@ -73,8 +91,11 @@ def delete_review(
     current_user: models.User = Depends(get_current_user),
 ):
     """
-    Regular/facility_manager: delete own reviews.
-    Admin: "remove" any review (soft delete).
+    Soft-delete a review.
+
+    Regular users and facility managers can delete their own reviews.
+    Admins can "remove" any review. Deletion is soft (``deleted=True``),
+    so it can be restored later.
     """
     review = db.query(models.Review).filter(models.Review.id == review_id).first()
     if not review:

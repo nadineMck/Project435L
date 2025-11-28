@@ -19,6 +19,25 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("/register", response_model=schemas.UserOut)
 def register_user(user_in: schemas.UserCreate, db: Session = Depends(get_db)):
+    """
+    Register a new user.
+
+    This endpoint creates a new user account with a given role
+    (``admin``, ``regular``, or ``facility_manager``). It validates that the
+    username and email are unique.
+
+    Parameters
+    ----------
+    user_in : UserCreate
+        User details including name, username, email, role, and password.
+    db : Session
+        Database session.
+
+    Raises
+    ------
+    HTTPException
+        - 400 if the username or email already exists.
+    """
     existing = db.query(models.User).filter(
         (models.User.username == user_in.username) | (models.User.email == user_in.email)
     ).first()
@@ -44,6 +63,26 @@ def login_for_access_token(
     password: str,
     db: Session = Depends(get_db),
 ):
+    """
+    Authenticate a user and return a JWT access token.
+
+    This endpoint checks the provided username and password, and if valid,
+    issues a short-lived JWT token that is used for authenticated API calls.
+
+    Parameters
+    ----------
+    username : str
+        Username of the account.
+    password : str
+        Plain-text password.
+    db : Session
+        Database session.
+
+    Raises
+    ------
+    HTTPException
+        - 401 if credentials are invalid.
+    """
     user = authenticate_user(db, username, password)
     if not user:
         raise HTTPException(
@@ -55,6 +94,12 @@ def login_for_access_token(
 
 @router.get("/me", response_model=schemas.UserOut)
 def read_current_user(current_user: models.User = Depends(get_current_user)):
+    """
+    Get the currently authenticated user.
+
+    Returns the profile information of the user associated with the provided
+    Bearer token.
+    """
     return current_user
 
 
@@ -65,8 +110,15 @@ def update_current_user(
     current_user: models.User = Depends(get_current_user),
 ):
     """
-    Regular / facility_manager / admin can manage their own profile.
-    Non-admin users CANNOT change their role.
+    Update the profile of the current user.
+
+    Regular users and facility managers can update their own profile fields
+    (name, email). Only admins are allowed to change their own role.
+
+    Raises
+    ------
+    HTTPException
+        - 403 if a non-admin tries to change their role.
     """
     data = user_update.dict(exclude_unset=True)
 
@@ -88,7 +140,16 @@ def list_users(
     _: models.User = Depends(require_roles("admin")),
 ):
     """
-    Admin-only: full user listing.
+    List all registered users. *(Admin-only)*
+
+    This endpoint returns full profile information for every user in the system,
+    including their roles, emails, and account details. Only administrators are
+    permitted to access this endpoint because it reveals sensitive user data.
+
+    Returns
+    -------
+    List[UserOut]
+        A list of all users stored in the database.
     """
     return db.query(models.User).all()
 
@@ -100,7 +161,16 @@ def get_user(
     _: models.User = Depends(require_roles("admin")),
 ):
     """
-    Admin-only: view any specific user.
+    Get a user by username. *(Admin-only)*
+
+    Administrators can fetch the full profile of any user in the system
+    using their unique username. This is useful for inspection,
+    troubleshooting, or verifying user account details.
+
+    Raises
+    ------
+    HTTPException
+        - 404 if the user does not exist.
     """
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
@@ -116,9 +186,21 @@ def update_user(
     current_user: models.User = Depends(get_current_user),
 ):
     """
-    - Admin: update any user (including role).
-    - Any user: update own profile (but not role unless admin).
-    - Facility manager has no user-admin over others.
+    Update any user's account information.
+
+    - Administrators can update **any** user’s profile, including name, email,
+      and role.
+    - Regular users may update **only their own** name and email.
+    - Only administrators can modify a user's role.
+
+    This endpoint applies validation to ensure users cannot escalate their own
+    privileges or alter protected fields.
+
+    Raises
+    ------
+    HTTPException
+        - 403 if a non-admin attempts to modify someone else's profile or change roles.
+        - 404 if the target user does not exist.
     """
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
@@ -150,7 +232,16 @@ def reset_user_password(
     _: models.User = Depends(require_roles("admin")),
 ):
     """
-    Admin-only: reset any user's password.
+    Reset a user's password. *(Admin-only)*
+
+    This endpoint allows administrators to forcibly reset the password of
+    any existing user. A new password is generated or assigned, depending
+    on implementation.
+
+    Raises
+    ------
+    HTTPException
+        - 404 if the user does not exist.
     """
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
@@ -167,6 +258,18 @@ def delete_user(
     db: Session = Depends(get_db),
     _: models.User = Depends(require_roles("admin")),
 ):
+    """
+    Delete a user from the system. *(Admin-only)*
+
+    This operation permanently removes a user account and all associated
+    database records. Only administrators may delete user accounts, as this
+    action is irreversible.
+
+    Raises
+    ------
+    HTTPException
+        - 404 if the user does not exist.
+    """
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -183,8 +286,16 @@ def get_user_booking_history(
     _: models.User = Depends(require_roles("admin")),
 ):
     """
-    Admin-only: view any user's booking history.
-    Regular users see their own history via /bookings/ or /users/me.
+    View any user's full booking history. *(Admin-only)*
+
+    Administrators can inspect all bookings made by a specific user,
+    including both past and future reservations. This is useful for audits,
+    troubleshooting disputes, or system monitoring.
+
+    Raises
+    ------
+    HTTPException
+        - 404 if the user does not exist.
     """
     user = db.query(models.User).filter(models.User.username == username).first()
     if not user:

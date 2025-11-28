@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>API Reference &#8212; Smart Meeting Room Backend 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=686e5160" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=01f34227"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Smart Meeting Room Backend" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">¶</a></h1>
+<section id="module-app.routers.users">
+<span id="users"></span><h2>Users<a class="headerlink" href="#module-app.routers.users" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.delete_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">delete_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.delete_user" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a user from the system. <em>(Admin-only)</em></p>
+<p>This operation permanently removes a user account and all associated
+database records. Only administrators may delete user accounts, as this
+action is irreversible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>404 if the user does not exist.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.get_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">get_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.get_user" title="Link to this definition">¶</a></dt>
+<dd><p>Get a user by username. <em>(Admin-only)</em></p>
+<p>Administrators can fetch the full profile of any user in the system
+using their unique username. This is useful for inspection,
+troubleshooting, or verifying user account details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>404 if the user does not exist.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.get_user_booking_history">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">get_user_booking_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.get_user_booking_history" title="Link to this definition">¶</a></dt>
+<dd><p>View any user’s full booking history. <em>(Admin-only)</em></p>
+<p>Administrators can inspect all bookings made by a specific user,
+including both past and future reservations. This is useful for audits,
+troubleshooting disputes, or system monitoring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>404 if the user does not exist.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.list_users">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">list_users</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.list_users" title="Link to this definition">¶</a></dt>
+<dd><p>List all registered users. <em>(Admin-only)</em></p>
+<p>This endpoint returns full profile information for every user in the system,
+including their roles, emails, and account details. Only administrators are
+permitted to access this endpoint because it reveals sensitive user data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of all users stored in the database.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List[UserOut]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.login_for_access_token">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">login_for_access_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.login_for_access_token" title="Link to this definition">¶</a></dt>
+<dd><p>Authenticate a user and return a JWT access token.</p>
+<p>This endpoint checks the provided username and password, and if valid,
+issues a short-lived JWT token that is used for authenticated API calls.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> (<em>str</em>) – Username of the account.</p></li>
+<li><p><strong>password</strong> (<em>str</em>) – Plain-text password.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>401 if credentials are invalid.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.read_current_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">read_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.read_current_user" title="Link to this definition">¶</a></dt>
+<dd><p>Get the currently authenticated user.</p>
+<p>Returns the profile information of the user associated with the provided
+Bearer token.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.register_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">register_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.register_user" title="Link to this definition">¶</a></dt>
+<dd><p>Register a new user.</p>
+<p>This endpoint creates a new user account with a given role
+(<code class="docutils literal notranslate"><span class="pre">admin</span></code>, <code class="docutils literal notranslate"><span class="pre">regular</span></code>, or <code class="docutils literal notranslate"><span class="pre">facility_manager</span></code>). It validates that the
+username and email are unique.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user_in</strong> (<em>UserCreate</em>) – User details including name, username, email, role, and password.</p></li>
+<li><p><strong>db</strong> (<em>Session</em>) – Database session.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>400 if the username or email already exists.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.reset_user_password">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">reset_user_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">payload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.reset_user_password" title="Link to this definition">¶</a></dt>
+<dd><p>Reset a user’s password. <em>(Admin-only)</em></p>
+<p>This endpoint allows administrators to forcibly reset the password of
+any existing user. A new password is generated or assigned, depending
+on implementation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>404 if the user does not exist.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.update_current_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">update_current_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.update_current_user" title="Link to this definition">¶</a></dt>
+<dd><p>Update the profile of the current user.</p>
+<p>Regular users and facility managers can update their own profile fields
+(name, email). Only admins are allowed to change their own role.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>403 if a non-admin tries to change their role.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.users.update_user">
+<span class="sig-prename descclassname"><span class="pre">app.routers.users.</span></span><span class="sig-name descname"><span class="pre">update_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.users.update_user" title="Link to this definition">¶</a></dt>
+<dd><p>Update any user’s account information.</p>
+<ul class="simple">
+<li><p>Administrators can update <strong>any</strong> user’s profile, including name, email,
+and role.</p></li>
+<li><p>Regular users may update <strong>only their own</strong> name and email.</p></li>
+<li><p>Only administrators can modify a user’s role.</p></li>
+</ul>
+<p>This endpoint applies validation to ensure users cannot escalate their own
+privileges or alter protected fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>403 if a non-admin attempts to modify someone else’s profile or change roles.
+    - 404 if the target user does not exist.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.routers.rooms">
+<span id="rooms"></span><h2>Rooms<a class="headerlink" href="#module-app.routers.rooms" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.rooms.create_room">
+<span class="sig-prename descclassname"><span class="pre">app.routers.rooms.</span></span><span class="sig-name descname"><span class="pre">create_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.rooms.create_room" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new meeting room.</p>
+<p>Only admins and facility managers can create rooms. The room name must be unique.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>HTTPException</strong> – <ul class="simple">
+<li><p>400 if a room with the same name already exists.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.rooms.delete_room">
+<span class="sig-prename descclassname"><span class="pre">app.routers.rooms.</span></span><span class="sig-name descname"><span class="pre">delete_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.rooms.delete_room" title="Link to this definition">¶</a></dt>
+<dd><p>Delete a meeting room. <em>(Admin or Facility Manager)</em></p>
+<p>Permanently removes the room from the system.
+Raises a 404 error if the room does not exist.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.rooms.get_room">
+<span class="sig-prename descclassname"><span class="pre">app.routers.rooms.</span></span><span class="sig-name descname"><span class="pre">get_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.rooms.get_room" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a single meeting room by its ID.</p>
+<p>Returns full room details including capacity, equipment, and availability.
+Raises a 404 error if the room does not exist.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.rooms.list_rooms">
+<span class="sig-prename descclassname"><span class="pre">app.routers.rooms.</span></span><span class="sig-name descname"><span class="pre">list_rooms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_capacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">equipment_contains</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">only_available</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.rooms.list_rooms" title="Link to this definition">¶</a></dt>
+<dd><p>List rooms with optional filters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>min_capacity</strong> (<em>int</em><em>, </em><em>optional</em>) – Minimum room capacity.</p></li>
+<li><p><strong>location</strong> (<em>str</em><em>, </em><em>optional</em>) – Exact location string to match.</p></li>
+<li><p><strong>equipment_contains</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter rooms whose equipment field contains this substring.</p></li>
+<li><p><strong>only_available</strong> (<em>bool</em><em>, </em><em>optional</em>) – If True, only rooms marked as available are returned.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.rooms.update_room">
+<span class="sig-prename descclassname"><span class="pre">app.routers.rooms.</span></span><span class="sig-name descname"><span class="pre">update_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">room_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.rooms.update_room" title="Link to this definition">¶</a></dt>
+<dd><p>Update details of an existing room. <em>(Admin or Facility Manager)</em></p>
+<p>Allows modifying capacity, equipment, location, and availability.
+Raises a 404 error if the room is not found.</p>
+</dd></dl>
+
+</section>
+<section id="module-app.routers.bookings">
+<span id="bookings"></span><h2>Bookings<a class="headerlink" href="#module-app.routers.bookings" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.cancel_booking">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">cancel_booking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">booking_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.cancel_booking" title="Link to this definition">¶</a></dt>
+<dd><p>Cancel a booking.</p>
+<ul class="simple">
+<li><p>Regular users and facility managers can cancel their own bookings.</p></li>
+<li><p>Admins can force-cancel any booking (override).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.check_room_availability">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">check_room_availability</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.check_room_availability" title="Link to this definition">¶</a></dt>
+<dd><p>Check if a room is available in a given time range.</p>
+<p>This does not create a booking. It just verifies if any existing
+bookings overlap with the requested time window.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.create_booking">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">create_booking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">booking_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.create_booking" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new booking for a room.</p>
+<p>Regular users and facility managers must respect room availability:
+overlapping bookings are rejected. Admins can override conflicts and
+create overlapping bookings if needed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.list_bookings">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">list_bookings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.list_bookings" title="Link to this definition">¶</a></dt>
+<dd><p>List bookings for the current user or all bookings.</p>
+<ul class="simple">
+<li><p>Admin and facility managers see <strong>all</strong> bookings.</p></li>
+<li><p>Regular users see <strong>only their own</strong> bookings.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.overlaps">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.overlaps" title="Link to this definition">¶</a></dt>
+<dd><p>Check if two time intervals overlap.</p>
+<p>Returns True if the interval [start1, end1) overlaps with [start2, end2).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.bookings.update_booking">
+<span class="sig-prename descclassname"><span class="pre">app.routers.bookings.</span></span><span class="sig-name descname"><span class="pre">update_booking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">booking_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">booking_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.bookings.update_booking" title="Link to this definition">¶</a></dt>
+<dd><p>Update an existing booking.</p>
+<p>Only the owner of the booking or an admin can update the booking.
+For non-admins, the new time range must not overlap with other
+bookings for the same room.</p>
+</dd></dl>
+
+</section>
+<section id="module-app.routers.reviews">
+<span id="reviews"></span><h2>Reviews<a class="headerlink" href="#module-app.routers.reviews" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.create_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">create_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.create_review" title="Link to this definition">¶</a></dt>
+<dd><p>Create a new review for a room.</p>
+<p>Only authenticated users can review rooms. The review is linked
+to the current user and the specified room.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.delete_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">delete_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.delete_review" title="Link to this definition">¶</a></dt>
+<dd><p>Soft-delete a review.</p>
+<p>Regular users and facility managers can delete their own reviews.
+Admins can “remove” any review. Deletion is soft (<code class="docutils literal notranslate"><span class="pre">deleted=True</span></code>),
+so it can be restored later.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.flag_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">flag_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.flag_review" title="Link to this definition">¶</a></dt>
+<dd><p>Admin-only: mark a review as flagged (moderation).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.get_reviews_for_room">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">get_reviews_for_room</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">room_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.get_reviews_for_room" title="Link to this definition">¶</a></dt>
+<dd><p>Get all non-deleted reviews for a room.</p>
+<p>Soft-deleted reviews are excluded from this listing.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.restore_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">restore_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.restore_review" title="Link to this definition">¶</a></dt>
+<dd><p>Admin-only: restore a previously deleted review.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.unflag_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">unflag_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(role_checker)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.unflag_review" title="Link to this definition">¶</a></dt>
+<dd><p>Admin-only: clear the flagged status of a review.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.routers.reviews.update_review">
+<span class="sig-prename descclassname"><span class="pre">app.routers.reviews.</span></span><span class="sig-name descname"><span class="pre">update_review</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">review_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">review_update</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Depends(get_current_user)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#app.routers.reviews.update_review" title="Link to this definition">¶</a></dt>
+<dd><p>Update an existing review.</p>
+<ul class="simple">
+<li><p>Regular users and facility managers can update <strong>their own</strong> reviews.</p></li>
+<li><p>Admins can update any review.</p></li>
+<li><p>Deleted reviews cannot be updated.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Smart Meeting Room Backend</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-app.routers.users">Users</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-app.routers.rooms">Rooms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-app.routers.bookings">Bookings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-app.routers.reviews">Reviews</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Smart Meeting Room Backend</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, Nadine.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.1.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
