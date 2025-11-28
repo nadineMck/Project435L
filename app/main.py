@@ -11,6 +11,8 @@ app = FastAPI(
     version="0.1.0",
     description="Practice project with users, rooms, bookings, and reviews.",
 )
+from .error_handlers import register_exception_handlers
+register_exception_handlers(app)
 
 app.include_router(users.router)
 app.include_router(rooms.router)
