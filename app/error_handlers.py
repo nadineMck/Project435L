@@ -1,4 +1,3 @@
-# app/error_handlers.py
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
@@ -12,12 +11,14 @@ def register_exception_handlers(app):
 
     @app.exception_handler(RequestValidationError)
     async def validation_exception_handler(request: Request, exc: RequestValidationError):
+        # Keep "detail" for tests + add extra metadata
         return JSONResponse(
             status_code=422,
             content={
                 "error": "Validation error",
-                "path": request.url.path,
-                "details": exc.errors(),
+                "detail": "Invalid request data",
+                "path": str(request.url.path),
+                "errors": exc.errors(),
             },
         )
 
@@ -27,19 +28,19 @@ def register_exception_handlers(app):
             status_code=exc.status_code,
             content={
                 "error": "HTTP error",
-                "message": exc.detail,
-                "path": request.url.path,
+                "detail": exc.detail,              #tests will read this
+                "path": str(request.url.path),
             },
         )
 
     @app.exception_handler(Exception)
     async def unhandled_exception_handler(request: Request, exc: Exception):
-        # Fallback for any unexpected error
+        # Fallback for unexpected errors
         return JSONResponse(
             status_code=500,
             content={
                 "error": "Internal server error",
-                "message": "An unexpected error occurred.",
-                "path": request.url.path,
+                "detail": "An unexpected error occurred",  #useful + keeps key
+                "path": str(request.url.path),
             },
         )

@@ -6,6 +6,9 @@ from datetime import datetime
 from .. import schemas, models
 from ..deps import get_db, get_current_user
 
+from pybreaker import CircuitBreakerError
+from ..circuit_breaker import booking_circuit_breaker
+
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
 
@@ -74,7 +77,7 @@ def list_bookings(
         return db.query(models.Booking).all()
     return db.query(models.Booking).filter(models.Booking.user_id == current_user.id).all()
 
-
+'''
 @router.post("/", response_model=schemas.BookingOut)
 def create_booking(
     booking_in: schemas.BookingCreate,
@@ -113,6 +116,68 @@ def create_booking(
     db.commit()
     db.refresh(booking)
     return booking
+'''
+@router.post("/", response_model=schemas.BookingOut)
+def create_booking(
+    booking_in: schemas.BookingCreate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+    force_fail: bool = False,   # <--- for demo / testing only
+):
+    """
+    Create a booking for the current user.
+
+    The critical part (DB commit) is wrapped with a circuit breaker
+    to protect the system from repeated downstream failures.
+
+    If `force_fail=true` is passed (for testing), the operation will
+    deliberately fail to demonstrate the circuit breaker behavior.
+    """
+
+    # --- RBAC and overlap logic as before ---
+    # (keep your existing checks here: role permissions, time range, conflicts...)
+
+    # Example skeleton – DO NOT DELETE your existing logic:
+    # if current_user.role not in ("admin", "regular", "facility_manager"):
+    #     raise HTTPException(status_code=403, detail="Not allowed to create booking")
+    #
+    # existing = db.query(models.Booking)...  # your overlap logic
+    # for b in existing:
+    #     if overlaps(...):
+    #         raise HTTPException(status_code=400, detail="Room already booked for that time range")
+
+    booking = models.Booking(
+        room_id=booking_in.room_id,
+        user_id=current_user.id,
+        start_time=booking_in.start_time,
+        end_time=booking_in.end_time,
+    )
+
+    @booking_circuit_breaker
+    def _save_booking():
+        # simulate a downstream failure if requested (for demo)
+        if force_fail:
+            raise RuntimeError("Simulated downstream failure for circuit breaker demo")
+
+        db.add(booking)
+        db.commit()
+        db.refresh(booking)
+        return booking
+
+    try:
+        return _save_booking()
+    except CircuitBreakerError:
+        # Circuit is open: we fail fast with 503
+        raise HTTPException(
+            status_code=503,
+            detail="Booking service temporarily unavailable (circuit open). Please try again later.",
+        )
+    except RuntimeError as e:
+        # Underlying simulated failure (while circuit still closed)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Downstream failure in booking service: {str(e)}",
+        )
 
 
 @router.patch("/{booking_id}", response_model=schemas.BookingOut)

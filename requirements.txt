@@ -6,4 +6,8 @@ python-jose[cryptography]
 passlib[bcrypt]
 email-validator
 httpx
-
+pytest
+pytest-cov
+memory-profiler
+psutil
+slowapi
